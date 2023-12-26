@@ -1,38 +1,28 @@
 import random
 from deap import base, creator, tools, algorithms
 
-# Define your messages, nodes, and modules
-# Generate 100 messages, nodes, and modules
-messages = ['msg{}'.format(i) for i in range(1, 101)]
-nodes = ['node{}'.format(i) for i in range(1, 101)]
-modules = ['module{}'.format(i) for i in range(1, 101)]
 
-# Print the first few elements of each list to verify
-print("Messages:", messages[:5])
-print("Nodes:", nodes[:5])
-print("Modules:", modules[:5])
-
-
-# Create Individual
+# Custom Individual Creation
 def create_individual():
-    return [(random.choice(messages), random.choice(nodes), random.choice(modules)) for _ in range(len(messages))]
+    individual = []
+    for msg in messages:
+        # For each message, choose a module, its placement, and a routing path
+        chosen_module = random.choice(modules)
+        placement = random_placement_decision(chosen_module)  # Implement this based on your YAFS placement logic
+        routing = random_routing_decision(msg, chosen_module)  # Implement this based on your YAFS routing logic
+        individual.append((msg, placement, routing))
+    return individual
 
-# Fitness and Individual Classes
-creator.create("FitnessMulti", base.Fitness, weights=(-1.0, -1.0))  # Assuming minimization
-creator.create("Individual", list, fitness=creator.FitnessMulti)
-
-# Initialize Population
-toolbox = base.Toolbox()
 toolbox.register("individual", tools.initIterate, creator.Individual, create_individual)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+
 
 # Fitness Evaluation Function
 def evaluate(individual):
-    # Implement your evaluation logic here
-    # This might involve simulating the network behavior in YAFS based on the individual's decisions
-    deadline_penalty = random.random()
-    latency_cost = random.random()
-    return deadline_penalty, latency_cost
+    # Implement a function to simulate the network with the given individual's configuration
+    # and return relevant performance metrics
+    performance_metrics = simulate_network(individual)  # Implement this function
+    return performance_metrics
 
 toolbox.register("evaluate", evaluate)
 
