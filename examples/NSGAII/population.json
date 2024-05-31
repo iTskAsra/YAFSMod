@@ -1,0 +1,7 @@
+{
+    "populations": [
+        {"id": 0, "entity": 2, "lambda": 10, "type": "source", "module": 0},
+        {"id": 1, "entity": 1, "lambda": 5, "type": "source", "module": 1},
+        {"id": 2, "entity": 0, "lambda": 2, "type": "sink", "module": 2}
+    ]
+}
